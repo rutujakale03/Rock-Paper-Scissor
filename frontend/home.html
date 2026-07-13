@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors — Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+/* ══════════════════════════════════════════════
+   HOME PAGE — Vibrant Sunset + Ocean theme
+   Colors: Deep violet bg, coral/amber/cyan accents
+══════════════════════════════════════════════ */
+:root {
+  --bg:       #0d0d1a;
+  --bg2:      #12102b;
+  --coral:    #ff6b6b;
+  --amber:    #ffd93d;
+  --cyan:     #4ecdc4;
+  --violet:   #a855f7;
+  --blue:     #3b82f6;
+  --green:    #22c55e;
+  --card:     rgba(255,255,255,0.05);
+  --card-b:   rgba(255,255,255,0.1);
+  --text:     #f1f5f9;
+  --muted:    rgba(241,245,249,0.55);
+  --radius:   20px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Animated gradient background ── */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 30%, #0a1a2e 60%, #0d1a0d 100%);
+  background-size: 400% 400%;
+  animation: bgAnim 18s ease infinite;
+}
+@keyframes bgAnim {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* ── Glowing orbs ── */
+.orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+.orb-1 { width:600px; height:600px; background:rgba(168,85,247,0.15); top:-200px; left:-200px; animation: orbF 14s ease-in-out infinite alternate; }
+.orb-2 { width:500px; height:500px; background:rgba(255,107,107,0.12); bottom:-150px; right:-150px; animation: orbF 11s ease-in-out infinite alternate-reverse; }
+.orb-3 { width:400px; height:400px; background:rgba(78,205,196,0.1); top:40%; left:50%; transform:translateX(-50%); animation: orbF 16s ease-in-out infinite alternate; }
+@keyframes orbF { from{transform:translate(0,0) scale(1);} to{transform:translate(40px,50px) scale(1.1);} }
+
+/* ── All content above orbs ── */
+.page { position: relative; z-index: 1; }
+
+/* ══ NAVBAR ══ */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,13,26,0.8); backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0 40px; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  font-size: 1.3rem; font-weight: 900; letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--coral), var(--amber));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-links { display: flex; gap: 10px; align-items: center; }
+.nav-btn {
+  padding: 9px 22px; border-radius: 50px; font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.nav-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.nav-btn.outline {
+  background: transparent; color: var(--text);
+  border: 1.5px solid rgba(255,255,255,0.2);
+}
+.nav-btn.outline:hover { border-color: var(--cyan); color: var(--cyan); }
+.nav-btn.primary {
+  background: linear-gradient(135deg, var(--coral), var(--violet));
+  color: #fff; box-shadow: 0 4px 16px rgba(255,107,107,0.3);
+}
+.nav-btn.primary:hover { box-shadow: 0 8px 24px rgba(255,107,107,0.45); }
+
+/* ══ HERO ══ */
+.hero {
+  min-height: calc(100vh - 68px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 60px 24px;
+}
+.hero-emoji { font-size: 5rem; letter-spacing: 12px; margin-bottom: 24px; animation: bounce 2s ease-in-out infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1;
+  margin-bottom: 20px; letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--coral) 0%, var(--amber) 40%, var(--cyan) 80%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  background-size: 200% auto; animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:0% center;} 100%{background-position:200% center;} }
+.hero-sub {
+  font-size: clamp(1rem, 2.5vw, 1.25rem); color: var(--muted);
+  max-width: 560px; line-height: 1.7; margin-bottom: 40px;
+}
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.hero-btn {
+  padding: 16px 36px; border-radius: 50px; font-family: 'Poppins', sans-serif;
+  font-size: 1rem; font-weight: 700; cursor: pointer; border: none;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+}
+.hero-btn:hover { transform: translateY(-4px) scale(1.03); }
+.hero-btn.play {
+  background: linear-gradient(135deg, var(--coral), var(--violet));
+  color: #fff; box-shadow: 0 8px 28px rgba(255,107,107,0.4);
+}
+.hero-btn.play:hover { box-shadow: 0 14px 36px rgba(255,107,107,0.55); }
+.hero-btn.register {
+  background: rgba(255,255,255,0.08); color: var(--text);
+  border: 1.5px solid rgba(255,255,255,0.18);
+}
+.hero-btn.register:hover { background: rgba(255,255,255,0.14); border-color: var(--cyan); color: var(--cyan); }
+.hero-scroll { margin-top: 56px; color: var(--muted); font-size: 0.82rem; animation: fadeUp 1s ease 1s both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+.scroll-arrow { display: block; font-size: 1.4rem; animation: arrowBounce 1.5s ease-in-out infinite; }
+@keyframes arrowBounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+
+/* ══ SECTION WRAPPER ══ */
+.section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+.section-label {
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2.5px;
+  color: var(--cyan); margin-bottom: 12px; text-align: center;
+}
+.section-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; text-align: center;
+  margin-bottom: 12px; line-height: 1.2;
+}
+.section-sub { text-align: center; color: var(--muted); font-size: 1rem; margin-bottom: 52px; max-width: 520px; margin-left: auto; margin-right: auto; }
+
+/* ══ FEATURES GRID ══ */
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.feature-card {
+  background: var(--card); border: 1px solid var(--card-b);
+  border-radius: var(--radius); padding: 28px 24px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent-line, linear-gradient(90deg, var(--coral), var(--violet)));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.18); }
+.feature-icon { font-size: 2.4rem; margin-bottom: 16px; }
+.feature-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.feature-desc  { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+
+/* ══ INFO CARDS (Login / Admin) ══ */
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+.info-card {
+  border-radius: var(--radius); padding: 36px 32px;
+  position: relative; overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.info-card:hover { transform: translateY(-5px); }
+.info-card.login-card-home {
+  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(168,85,247,0.15));
+  border: 1.5px solid rgba(59,130,246,0.3);
+  box-shadow: 0 8px 32px rgba(59,130,246,0.15);
+}
+.info-card.admin-card-home {
+  background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,217,61,0.12));
+  border: 1.5px solid rgba(255,107,107,0.3);
+  box-shadow: 0 8px 32px rgba(255,107,107,0.15);
+}
+.info-card-icon { font-size: 3rem; margin-bottom: 16px; }
+.info-card-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; }
+.info-card.login-card-home .info-card-title { color: #93c5fd; }
+.info-card.admin-card-home .info-card-title { color: #fca5a5; }
+.info-card-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+.info-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.info-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.88rem; color: var(--muted); line-height: 1.5;
+}
+.info-list li .check { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.info-cred {
+  background: rgba(0,0,0,0.3); border-radius: 12px; padding: 14px 18px;
+  margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.08);
+}
+.info-cred-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; padding: 4px 0; }
+.info-cred-label { color: var(--muted); font-weight: 500; }
+.info-cred-value { font-weight: 700; font-family: monospace; font-size: 0.95rem; }
+.info-card.login-card-home .info-cred-value { color: #93c5fd; }
+.info-card.admin-card-home .info-cred-value { color: #fca5a5; }
+.info-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 28px; border-radius: 50px; font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem; font-weight: 700; cursor: pointer; border: none;
+  text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; width: 100%; justify-content: center;
+}
+.info-btn:hover { transform: translateY(-2px); }
+.info-btn.blue { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #fff; box-shadow: 0 6px 20px rgba(59,130,246,0.35); }
+.info-btn.blue:hover { box-shadow: 0 10px 28px rgba(59,130,246,0.5); }
+.info-btn.red  { background: linear-gradient(135deg, var(--coral), var(--amber)); color: #fff; box-shadow: 0 6px 20px rgba(255,107,107,0.35); }
+.info-btn.red:hover  { box-shadow: 0 10px 28px rgba(255,107,107,0.5); }
+
+/* ══ HOW TO PLAY ══ */
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.step-card {
+  background: var(--card); border: 1px solid var(--card-b);
+  border-radius: var(--radius); padding: 28px 20px; text-align: center;
+  transition: transform 0.25s;
+}
+.step-card:hover { transform: translateY(-4px); }
+.step-num {
+  width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 800;
+}
+.step-num.s1 { background: linear-gradient(135deg, var(--coral), #ff8e53); }
+.step-num.s2 { background: linear-gradient(135deg, var(--violet), var(--blue)); }
+.step-num.s3 { background: linear-gradient(135deg, var(--cyan), var(--green)); }
+.step-num.s4 { background: linear-gradient(135deg, var(--amber), #f97316); }
+.step-emoji { font-size: 2rem; margin-bottom: 12px; }
+.step-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+.step-desc  { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+/* ══ DIVIDER ══ */
+.divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); margin: 0 40px; }
+
+/* ══ FOOTER ══ */
+.footer {
+  text-align: center; padding: 40px 24px;
+  color: var(--muted); font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+.footer-links a { color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+.footer-links a:hover { color: var(--cyan); }
+
+/* ══ SERVER STATUS BAR ══ */
+.status-bar {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 20px; background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.8rem; color: var(--muted);
+}
+.s-dot { width: 8px; height: 8px; border-radius: 50%; background: #64748b; flex-shrink: 0; }
+.s-dot.online   { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.s-dot.offline  { background: var(--coral); box-shadow: 0 0 6px var(--coral); }
+.s-dot.checking { background: var(--amber); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 768px) {
+  .navbar { padding: 0 20px; }
+  .nav-links .nav-btn span { display: none; }
+  .section { padding: 60px 16px; }
+  .info-card { padding: 28px 22px; }
+}
+@media (max-width: 480px) {
+  .hero-emoji { font-size: 3.5rem; letter-spacing: 6px; }
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .hero-btn  { justify-content: center; }
+}
+    </style>
+  </head>
+  <body>
+
+    <!-- Background orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="page">
+
+      <!-- ── Server status bar ── -->
+      <div class="status-bar">
+        <span class="s-dot checking" id="s-dot"></span>
+        <span id="s-text">Checking server status…</span>
+      </div>
+
+      <!-- ══ NAVBAR ══ -->
+      <nav class="navbar">
+        <div class="nav-brand">✊ RPS Game</div>
+        <div class="nav-links">
+          <a href="#features"  class="nav-btn outline">Features</a>
+          <a href="#info"      class="nav-btn outline">Info</a>
+          <a href="register.html" class="nav-btn outline">Register</a>
+          <a href="login.html"    class="nav-btn primary">🎮 Play Now</a>
+        </div>
+      </nav>
+
+      <!-- ══ HERO ══ -->
+      <section class="hero">
+        <div class="hero-emoji">✊ ✋ ✌️</div>
+        <h1 class="hero-title">Rock Paper Scissors</h1>
+        <p class="hero-sub">
+          A full-stack multiplayer game with player accounts, live leaderboard,
+          match history, and an admin dashboard. Sign up and challenge the computer!
+        </p>
+        <div class="hero-btns">
+          <a href="login.html"    class="hero-btn play">🎮 Play Now</a>
+          <a href="register.html" class="hero-btn register">📝 Create Account</a>
+        </div>
+        <div class="hero-scroll">
+          <span>Scroll to learn more</span>
+          <span class="scroll-arrow">↓</span>
+        </div>
+      </section>
+
+      <!-- ══ FEATURES ══ -->
+      <section class="section" id="features">
+        <p class="section-label">What's inside</p>
+        <h2 class="section-title">Everything you need to play</h2>
+        <p class="section-sub">Built with Node.js, Express, MongoDB and vanilla JS — no frameworks needed.</p>
+
+        <div class="features-grid">
+          <div class="feature-card" style="--accent-line: linear-gradient(90deg,#ff6b6b,#a855f7)">
+            <div class="feature-icon">🔐</div>
+            <div class="feature-title">Player Accounts</div>
+            <div class="feature-desc">Register with a username and password. Your session is saved so you stay logged in across refreshes.</div>
+          </div>
+          <div class="feature-card" style="--accent-line: linear-gradient(90deg,#4ecdc4,#3b82f6)">
+            <div class="feature-icon">🏆</div>
+            <div class="feature-title">Live Leaderboard</div>
+            <div class="feature-desc">See all players ranked by wins in real time. Your row is highlighted so you always know your position.</div>
+          </div>
+          <div class="feature-card" style="--accent-line: linear-gradient(90deg,#ffd93d,#f97316)">
+            <div class="feature-icon">📜</div>
+            <div class="feature-title">Match History</div>
+            <div class="feature-desc">Every round is saved to MongoDB. Your last 5 results are shown instantly after each game.</div>
+          </div>
+          <div class="feature-card" style="--accent-line: linear-gradient(90deg,#a855f7,#ec4899)">
+            <div class="feature-icon">⚙️</div>
+            <div class="feature-title">Admin Dashboard</div>
+            <div class="feature-desc">Admins can view all players, see full stats, win percentages, and delete accounts from a dedicated panel.</div>
+          </div>
+          <div class="feature-card" style="--accent-line: linear-gradient(90deg,#22c55e,#4ecdc4)">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">Personal Score</div>
+            <div class="feature-desc">Track your wins, losses and draws. Reset your own score anytime without affecting other players.</div>
+          </div>
+          <div class="feature-card" style="--accent-line: linear-gradient(90deg,#3b82f6,#8b5cf6)">
+            <div class="feature-icon">🎨</div>
+            <div class="feature-title">Modern UI</div>
+            <div class="feature-desc">Animated backgrounds, glassmorphism cards, smooth transitions and full mobile responsiveness.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ══ LOGIN & ADMIN INFO ══ -->
+      <section class="section" id="info">
+        <p class="section-label">Access Information</p>
+        <h2 class="section-title">Login & Admin Details</h2>
+        <p class="section-sub">Everything you need to get started or manage the game.</p>
+
+        <div class="info-grid">
+
+          <!-- ── Player Login Card ── -->
+          <div class="info-card login-card-home">
+            <div class="info-card-icon">🎮</div>
+            <div class="info-card-title">Player Login</div>
+            <div class="info-card-desc">
+              Create a free account to start playing. Your scores and match history are saved automatically.
+            </div>
+
+            <ul class="info-list">
+              <li><span class="check">✅</span> Register with any username + password (min 4 chars)</li>
+              <li><span class="check">✅</span> Session saved in browser — stay logged in on refresh</li>
+              <li><span class="check">✅</span> Personal scoreboard: Wins / Draws / Losses</li>
+              <li><span class="check">✅</span> Last 5 match results shown after each game</li>
+              <li><span class="check">✅</span> Appear on the global leaderboard</li>
+            </ul>
+
+            <div class="info-cred">
+              <div class="info-cred-row">
+                <span class="info-cred-label">Page</span>
+                <span class="info-cred-value">login.html</span>
+              </div>
+              <div class="info-cred-row">
+                <span class="info-cred-label">Register at</span>
+                <span class="info-cred-value">register.html</span>
+              </div>
+              <div class="info-cred-row">
+                <span class="info-cred-label">Password min</span>
+                <span class="info-cred-value">4 characters</span>
+              </div>
+            </div>
+
+            <a href="login.html" class="info-btn blue">🎮 Go to Login</a>
+          </div>
+
+          <!-- ── Admin Card ── -->
+          <div class="info-card admin-card-home">
+            <div class="info-card-icon">⚙️</div>
+            <div class="info-card-title">Admin Dashboard</div>
+            <div class="info-card-desc">
+              The admin account has full access to player management, stats overview, and the ability to delete accounts.
+            </div>
+
+            <ul class="info-list">
+              <li><span class="check">🔑</span> Log in with the admin credentials below</li>
+              <li><span class="check">📊</span> View total players, games, wins and losses</li>
+              <li><span class="check">👥</span> See all players with win %, games played, join date</li>
+              <li><span class="check">🗑️</span> Delete any player and their full game history</li>
+              <li><span class="check">🔒</span> Non-admins are automatically redirected away</li>
+            </ul>
+
+            <div class="info-cred">
+              <div class="info-cred-row">
+                <span class="info-cred-label">Username</span>
+                <span class="info-cred-value">admin</span>
+              </div>
+              <div class="info-cred-row">
+                <span class="info-cred-label">Password</span>
+                <span class="info-cred-value">admin123</span>
+              </div>
+              <div class="info-cred-row">
+                <span class="info-cred-label">Dashboard</span>
+                <span class="info-cred-value">admin.html</span>
+              </div>
+            </div>
+
+            <a href="login.html" class="info-btn red">⚙️ Admin Login</a>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ══ HOW TO PLAY ══ -->
+      <section class="section">
+        <p class="section-label">Quick Guide</p>
+        <h2 class="section-title">How to Play</h2>
+        <p class="section-sub">Get started in 4 simple steps.</p>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num s1">1</div>
+            <div class="step-emoji">📝</div>
+            <div class="step-title">Register</div>
+            <div class="step-desc">Create your account with a username and password on the Register page.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num s2">2</div>
+            <div class="step-emoji">🔐</div>
+            <div class="step-title">Login</div>
+            <div class="step-desc">Sign in with your credentials. Admins are redirected to the dashboard automatically.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num s3">3</div>
+            <div class="step-emoji">✊</div>
+            <div class="step-title">Choose</div>
+            <div class="step-desc">Pick Rock, Paper or Scissors. The computer picks randomly and the result is instant.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num s4">4</div>
+            <div class="step-emoji">🏆</div>
+            <div class="step-title">Compete</div>
+            <div class="step-desc">Build your win streak, climb the leaderboard and track your history.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ══ FOOTER ══ -->
+      <footer class="footer">
+        <div class="footer-links">
+          <a href="home.html">Home</a>
+          <a href="login.html">Login</a>
+          <a href="register.html">Register</a>
+          <a href="index.html">Game</a>
+          <a href="admin.html">Admin</a>
+        </div>
+        <p>✊ Rock Paper Scissors — Full Stack Project &nbsp;|&nbsp; Node.js · Express · MongoDB</p>
+      </footer>
+
+    </div><!-- /page -->
+
+    <script>
+      // ── Server health check for the status bar ──
+      const sDot  = document.getElementById('s-dot');
+      const sText = document.getElementById('s-text');
+
+      async function checkServer() {
+        sDot.className  = 's-dot checking';
+        sText.textContent = 'Checking server status…';
+        try {
+          const ctrl = new AbortController();
+          const t = setTimeout(() => ctrl.abort(), 4000);
+          const res = await fetch('http://localhost:5500/api/score', { signal: ctrl.signal });
+          clearTimeout(t);
+          if (res.ok) {
+            sDot.className    = 's-dot online';
+            sText.textContent = '✅ Server is online — ready to play at http://localhost:5500';
+          } else throw new Error();
+        } catch {
+          sDot.className    = 's-dot offline';
+          sText.textContent = '❌ Server offline — run: cd backend && node server.js';
+        }
+      }
+      checkServer();
+
+      // ── If already logged in, show a welcome banner ──
+      (function checkSession() {
+        const raw = localStorage.getItem('rps_session');
+        if (!raw) return;
+        try {
+          const s = JSON.parse(raw);
+          if (!s || !s.username) return;
+          // Inject a small welcome bar below the navbar
+          const bar = document.createElement('div');
+          bar.style.cssText = 'background:rgba(78,205,196,0.12);border-bottom:1px solid rgba(78,205,196,0.25);padding:10px 24px;text-align:center;font-size:0.85rem;color:#4ecdc4;font-weight:600;position:relative;z-index:1;';
+          bar.innerHTML = `👋 Welcome back, <strong>${s.username}</strong>! &nbsp;
+            <a href="${s.isAdmin ? 'admin.html' : 'index.html'}" style="color:#ffd93d;text-decoration:none;font-weight:700;">
+              ${s.isAdmin ? '⚙️ Go to Dashboard →' : '🎮 Continue Playing →'}
+            </a>
+            &nbsp;&nbsp;
+            <a href="#" onclick="localStorage.removeItem('rps_session');location.reload();return false;" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">Logout</a>`;
+          // Insert after status bar
+          const statusBar = document.querySelector('.status-bar');
+          statusBar.insertAdjacentElement('afterend', bar);
+        } catch { localStorage.removeItem('rps_session'); }
+      })();
+    </script>
+  </body>
+</html>

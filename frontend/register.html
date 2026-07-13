@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — Rock Paper Scissors</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      /* ── Ocean Blue theme (same as login) ── */
+      :root {
+        --bg-from: #0f172a; --bg-to: #1e3a5f;
+        --accent:  #38bdf8; --accent2: #818cf8;
+        --card-bg: #ffffff; --text: #0f172a;
+        --muted:   #64748b; --error: #ef4444;
+        --success: #10b981; --border: #e2e8f0;
+      }
+      *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+      body {
+        font-family:'Poppins',sans-serif;
+        background:linear-gradient(135deg, var(--bg-from) 0%, var(--bg-to) 100%);
+        min-height:100vh; display:flex; align-items:center; justify-content:center;
+        position:relative; overflow:hidden; padding:20px;
+      }
+      .blob { position:fixed; border-radius:50%; filter:blur(80px); opacity:0.18; animation:floatBlob 12s ease-in-out infinite; pointer-events:none; z-index:0; }
+      .blob-1 { width:500px; height:500px; background:var(--accent);  top:-150px; left:-150px; animation-delay:0s; }
+      .blob-2 { width:400px; height:400px; background:var(--accent2); bottom:-100px; right:-100px; animation-delay:-4s; }
+      .blob-3 { width:300px; height:300px; background:#06b6d4; top:50%; left:60%; animation-delay:-8s; }
+      @keyframes floatBlob {
+        0%,100%{transform:translate(0,0) scale(1);}
+        33%{transform:translate(30px,-40px) scale(1.05);}
+        66%{transform:translate(-20px,20px) scale(0.95);}
+      }
+      .card {
+        position:relative; z-index:1; background:var(--card-bg);
+        border-radius:24px; padding:48px 40px; width:100%; max-width:420px;
+        box-shadow:0 25px 60px rgba(0,0,0,0.35);
+        animation:slideUp 0.5s ease both;
+      }
+      @keyframes slideUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+      .logo     { text-align:center; font-size:2.8rem; margin-bottom:12px; letter-spacing:4px; }
+      .title    { text-align:center; font-size:1.6rem; font-weight:800; color:var(--text); margin-bottom:6px; }
+      .subtitle { text-align:center; font-size:0.9rem; color:var(--muted); margin-bottom:24px; }
+      .server-status {
+        display:flex; align-items:center; gap:8px; background:#f8fafc;
+        border:1px solid var(--border); border-radius:10px; padding:10px 14px;
+        margin-bottom:24px; font-size:0.82rem; color:var(--muted);
+      }
+      .status-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; background:#94a3b8; transition:background 0.3s; }
+      .status-dot.online   { background:var(--success); box-shadow:0 0 6px var(--success); }
+      .status-dot.offline  { background:var(--error);   box-shadow:0 0 6px var(--error); }
+      .status-dot.checking { background:#f59e0b; box-shadow:0 0 6px #f59e0b; animation:pulse 1s infinite; }
+      @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+      .form-group { margin-bottom:16px; }
+      .form-label { display:block; font-size:0.82rem; font-weight:600; color:var(--text); margin-bottom:6px; }
+      .form-hint  { font-size:0.75rem; color:var(--muted); margin-top:4px; }
+      .form-input {
+        width:100%; padding:12px 16px; border:2px solid var(--border); border-radius:12px;
+        font-family:'Poppins',sans-serif; font-size:0.95rem; color:var(--text);
+        background:#f8fafc; outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+      }
+      .form-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(56,189,248,0.15); background:#fff; }
+      .form-input::placeholder { color:#b0bec5; }
+      .btn-primary {
+        width:100%; padding:13px;
+        background:linear-gradient(135deg, var(--accent), var(--accent2));
+        color:#fff; font-family:'Poppins',sans-serif; font-size:1rem; font-weight:700;
+        border:none; border-radius:12px; cursor:pointer; margin-top:8px;
+        transition:opacity 0.2s, transform 0.15s; letter-spacing:0.3px;
+      }
+      .btn-primary:hover:not(:disabled) { opacity:0.9; transform:translateY(-1px); }
+      .btn-primary:disabled { opacity:0.55; cursor:not-allowed; }
+      .msg-error {
+        margin-top:14px; padding:10px 14px; background:#fef2f2;
+        border:1px solid #fecaca; border-radius:10px; color:var(--error);
+        font-size:0.85rem; text-align:center; display:none;
+      }
+      .msg-error.visible { display:block; }
+      .msg-success {
+        margin-top:14px; padding:10px 14px; background:#f0fdf4;
+        border:1px solid #bbf7d0; border-radius:10px; color:var(--success);
+        font-size:0.85rem; font-weight:600; text-align:center; display:none;
+      }
+      .msg-success.visible { display:block; }
+      .alt-link { text-align:center; margin-top:20px; font-size:0.85rem; color:var(--muted); }
+      .alt-link a { color:var(--accent2); font-weight:600; text-decoration:none; }
+      .alt-link a:hover { color:var(--accent); text-decoration:underline; }
+      @media (max-width:480px) { .card{padding:36px 24px; margin:16px;} .title{font-size:1.35rem;} }
+    </style>
+  </head>
+  <body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="card">
+      <div class="logo">✊✋✌️</div>
+      <h1 class="title">Create Account</h1>
+      <p class="subtitle">Join and start playing!</p>
+
+      <div class="server-status" id="server-status">
+        <span class="status-dot checking" id="status-dot"></span>
+        <span id="status-text">Checking server…</span>
+      </div>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" class="form-input"
+            placeholder="Choose a username" maxlength="30"
+            autocomplete="username" autocorrect="off" autocapitalize="none" spellcheck="false" />
+          <p class="form-hint">Max 30 characters</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input"
+            placeholder="Choose a password" autocomplete="new-password" />
+          <p class="form-hint">At least 4 characters</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" class="form-input"
+            placeholder="Repeat your password" autocomplete="new-password" />
+        </div>
+        <button type="submit" class="btn-primary" id="register-btn">🚀 Create Account</button>
+      </form>
+
+      <div class="msg-error"   id="error-msg"></div>
+      <div class="msg-success" id="success-msg"></div>
+
+      <p class="alt-link">Already have an account? <a href="login.html">Login here</a></p>
+      <p class="alt-link" style="margin-top:10px;"><a href="home.html" style="color:#64748b;font-size:0.8rem;">← Back to Home</a></p>
+    </div>
+
+    <script>
+      const API_BASE = 'http://localhost:5500/api';
+
+      const registerForm  = document.getElementById('register-form');
+      const usernameEl    = document.getElementById('username');
+      const passwordEl    = document.getElementById('password');
+      const confirmPassEl = document.getElementById('confirm-password');
+      const registerBtn   = document.getElementById('register-btn');
+      const errorMsg      = document.getElementById('error-msg');
+      const successMsg    = document.getElementById('success-msg');
+      const statusDot     = document.getElementById('status-dot');
+      const statusText    = document.getElementById('status-text');
+
+      // Server health check
+      async function checkServer() {
+        statusDot.className = 'status-dot checking';
+        statusText.textContent = 'Checking server…';
+        try {
+          const ctrl = new AbortController();
+          const t = setTimeout(() => ctrl.abort(), 4000);
+          const res = await fetch(`${API_BASE}/score`, { signal: ctrl.signal });
+          clearTimeout(t);
+          if (res.ok) {
+            statusDot.className    = 'status-dot online';
+            statusText.textContent = '✅ Server online — ready to register!';
+          } else throw new Error();
+        } catch {
+          statusDot.className    = 'status-dot offline';
+          statusText.textContent = '❌ Server offline — start the backend first';
+        }
+      }
+      checkServer();
+
+      function showError(msg)   { errorMsg.textContent=msg; errorMsg.classList.add('visible'); successMsg.classList.remove('visible'); }
+      function showSuccess(msg) { successMsg.textContent=msg; successMsg.classList.add('visible'); errorMsg.classList.remove('visible'); }
+      function clearMessages()  { errorMsg.classList.remove('visible'); successMsg.classList.remove('visible'); }
+
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMessages();
+        const username = usernameEl.value.trim();
+        const password = passwordEl.value;
+        const confirm  = confirmPassEl.value;
+
+        if (!username)           { showError('Please enter a username.'); usernameEl.focus(); return; }
+        if (username.length > 30){ showError('Username must be 30 characters or less.'); return; }
+        if (!password)           { showError('Please enter a password.'); passwordEl.focus(); return; }
+        if (password.length < 4) { showError('Password must be at least 4 characters.'); passwordEl.focus(); return; }
+        if (password !== confirm) { showError('Passwords do not match.'); confirmPassEl.focus(); return; }
+
+        registerBtn.disabled    = true;
+        registerBtn.textContent = 'Creating account…';
+        try {
+          const res  = await fetch(`${API_BASE}/register`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ username, password }),
+          });
+          const data = await res.json();
+          if (!res.ok) { showError(data.error || 'Registration failed.'); return; }
+
+          showSuccess('✅ Account created! Redirecting to login…');
+          registerBtn.textContent = '✅ Done!';
+          setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        } catch {
+          showError('❌ Cannot reach server. Make sure the backend is running on port 5500.');
+        } finally {
+          if (!successMsg.classList.contains('visible')) {
+            registerBtn.disabled    = false;
+            registerBtn.textContent = '🚀 Create Account';
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

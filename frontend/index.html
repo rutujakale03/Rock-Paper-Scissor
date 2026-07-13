@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!-- Animated star-field -->
+    <canvas id="stars-canvas"></canvas>
+
+    <!-- ══════════════════════════════════════
+         MAIN GAME  (shown after session check)
+         script.js redirects to login.html if
+         no session found in localStorage
+    ══════════════════════════════════════ -->
+    <div class="app-layout" id="app-layout" style="display:none;">
+
+      <!-- ── Left / Main column ── -->
+      <div class="container">
+
+        <!-- Header -->
+        <div class="header-row">
+          <h1 class="title">✊ Rock Paper Scissors ✂️</h1>
+          <!-- Player badge -->
+          <div class="player-badge" id="player-badge">
+            <span class="badge-avatar" id="badge-avatar">?</span>
+            <div class="badge-info">
+              <span class="badge-name" id="badge-name">Player</span>
+              <span class="badge-sub">Playing now</span>
+            </div>
+            <a href="home.html" class="logout-btn" title="Home" style="text-decoration:none;">🏠</a>
+            <button class="logout-btn" id="logout-btn" title="Logout">↩</button>
+          </div>
+        </div>
+
+        <p class="subtitle">Choose your weapon and challenge the computer!</p>
+
+        <!-- Scoreboard -->
+        <div class="scoreboard">
+          <div class="score-box">
+            <span class="score-label" id="score-label-you">You</span>
+            <span class="score-value" id="user-score">0</span>
+          </div>
+          <div class="score-box draws">
+            <span class="score-label">Draws</span>
+            <span class="score-value" id="draw-score">0</span>
+          </div>
+          <div class="score-box">
+            <span class="score-label">Computer</span>
+            <span class="score-value" id="computer-score">0</span>
+          </div>
+        </div>
+
+        <!-- Choice Buttons -->
+        <div class="choices">
+          <button class="choice-btn" data-choice="rock">
+            <span class="emoji">✊</span>
+            <span class="label">Rock</span>
+          </button>
+          <button class="choice-btn" data-choice="paper">
+            <span class="emoji">✋</span>
+            <span class="label">Paper</span>
+          </button>
+          <button class="choice-btn" data-choice="scissors">
+            <span class="emoji">✌️</span>
+            <span class="label">Scissors</span>
+          </button>
+        </div>
+
+        <!-- Result Area -->
+        <div class="result-area" id="result-area" aria-live="polite">
+          <div class="battle">
+            <div class="player">
+              <p class="player-label">You chose</p>
+              <div class="choice-display" id="user-choice-display">❓</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="player">
+              <p class="player-label">Computer chose</p>
+              <div class="choice-display" id="computer-choice-display">❓</div>
+            </div>
+          </div>
+          <div class="result-message" id="result-message">Pick a choice to start playing!</div>
+        </div>
+
+        <!-- Reset Button -->
+        <button class="reset-btn" id="reset-btn">🔄 Reset My Score</button>
+
+        <!-- Match History -->
+        <div class="history-section">
+          <h2 class="history-title">My Last 5 Results</h2>
+          <ul class="history-list" id="history-list">
+            <li class="history-empty">No games played yet.</li>
+          </ul>
+        </div>
+
+      </div><!-- /container -->
+
+      <!-- ── Right column: Leaderboard ── -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <span class="sidebar-icon">🏆</span>
+          <h2 class="sidebar-title">Leaderboard</h2>
+          <button class="refresh-btn" id="refresh-players" title="Refresh">↻</button>
+        </div>
+        <ul class="players-list" id="players-list">
+          <li class="players-empty">Loading players…</li>
+        </ul>
+      </aside>
+
+    </div><!-- /app-layout -->
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
